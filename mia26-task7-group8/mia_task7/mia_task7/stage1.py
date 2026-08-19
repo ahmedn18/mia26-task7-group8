@@ -51,3 +51,5 @@ if not await self._send_x(0.30):
         "Stage 1: approach movement failed"
     )
     return False
+
+await asyncio.sleep(GATE_OPEN_S)
