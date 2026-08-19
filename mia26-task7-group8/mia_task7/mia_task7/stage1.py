@@ -40,3 +40,8 @@ if not await self._call_gate(True):
     )
     return False
 
+if not await self._send_yaw(math.radians(90)):
+    self.node.get_logger().error(
+        "Stage 1: yaw +90 failed"
+    )
+    return False
