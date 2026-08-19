@@ -24,6 +24,8 @@ setup(
     },
     entry_points={
         'console_scripts': [
+            'yaw_server = mia_task7.mia_task7.yaw_server:main',
+            'move_yaw_client = mia_task7.mia_task7.move_yaw_client:main',
         ],
     },
 )

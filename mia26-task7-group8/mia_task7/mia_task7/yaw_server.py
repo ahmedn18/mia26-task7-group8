@@ -5,7 +5,7 @@ from rclpy.node import Node
 from rclpy.action import ActionServer
 from geometry_msgs.msg import Twist
 from nav_msgs.msg import Odometry
-from robot_action.action import Move
+from turtleBot_interface.action import Move
 from std_srvs.srv import SetBool
 
 
