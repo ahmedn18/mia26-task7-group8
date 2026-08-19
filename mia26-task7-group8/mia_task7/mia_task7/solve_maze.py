@@ -27,6 +27,7 @@ import threading
 import traceback
 
 import rclpy
+from nav_msgs.msg import Odometry
 from rclpy.callback_groups import ReentrantCallbackGroup
 from rclpy.executors import MultiThreadedExecutor
 from rclpy.node import Node
@@ -90,7 +91,20 @@ class SolveMaze(Node):
         self.gate_client = self.create_client(
             SetBool, gate_service, callback_group=self.callback_group)
 
+        # The gate service is advertised by the maze itself, which comes up
+        # before ros_gz_sim has finished spawning the robot. Waiting on the
+        # service alone let the stages start while /odom did not yet exist,
+        # so the first goal aborted on a missing sensor. Watch for odometry
+        # too -- that is what actually proves the robot is in the world.
+        self._odom_seen = threading.Event()
+        self.odom_sub = self.create_subscription(
+            Odometry, '/odom', self._odom_callback, 10,
+            callback_group=self.callback_group)
+
         self.stages = self._load_stages()
+
+    def _odom_callback(self, _msg) -> None:
+        self._odom_seen.set()
 
     def _load_stages(self):
         """Return the stages that are actually implemented, in run order.
@@ -161,6 +175,15 @@ class SolveMaze(Node):
                 f'Gate service {self.gate_client.srv_name} never appeared '
                 f'after {self.startup_timeout:.0f}s. Is the maze running?')
             return False
+
+        self.get_logger().info('Waiting for the robot to be spawned...')
+        if not await asyncio.get_running_loop().run_in_executor(
+                None, self._odom_seen.wait, self.startup_timeout):
+            self.get_logger().error(
+                f'No /odom after {self.startup_timeout:.0f}s. The maze is up '
+                f'but the robot was never spawned -- check ros_gz_sim create.')
+            return False
+        self.get_logger().info('Robot is up, /odom is flowing.')
 
         for label, stage in self.stages:
             self.get_logger().info(f'--- {label} starting ---')

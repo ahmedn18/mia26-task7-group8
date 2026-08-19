@@ -49,7 +49,7 @@ CONTROL_HZ = 20.0
 ODOM_TIMEOUT_S = 2.0
 
 # How long to wait for the very first /odom message before giving up.
-ODOM_STARTUP_TIMEOUT_S = 5.0
+ODOM_STARTUP_TIMEOUT_S = 15.0
 
 # Abort a goal that has not completed in this long.
 GOAL_TIMEOUT_S = 30.0
