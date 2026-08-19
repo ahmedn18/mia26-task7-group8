@@ -57,8 +57,8 @@ def generate_launch_description():
 
     move_yaw_server = Node(
         package='mia_task7',
-        executable='yaw_server',
-        name='yaw_server',
+        executable='move_yaw_server',
+        name='move_yaw_server',
         output='screen',
         parameters=[{'use_sim_time': use_sim_time}])
 

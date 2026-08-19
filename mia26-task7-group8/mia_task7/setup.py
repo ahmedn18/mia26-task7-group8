@@ -29,10 +29,8 @@ setup(
     entry_points={
         'console_scripts': [
             'move_x_server = mia_task7.move_x_server:main',
-            'move_x_client = mia_task7.move_x_client:main',
-            'yaw_server = mia_task7.yaw_server:main',
+            'move_yaw_server = mia_task7.move_yaw_server:main',
             'solve_maze = mia_task7.solve_maze:main',
-            'move_yaw_client = mia_task7.move_yaw_client:main',
         ],
     },
 )

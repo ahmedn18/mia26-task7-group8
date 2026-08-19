@@ -1,9 +1,0 @@
-float32 first_yaw
-float32 second_yaw
----
-bool success
-string message
-
----
-string current_action
-float32 progress
