@@ -1,0 +1,10 @@
+# Goal: signed angle to rotate, in RADIANS. Positive turns left (CCW).
+float64 target_yaw
+---
+# Result
+bool success
+string message
+float64 angle_turned
+---
+# Feedback: angle turned so far, in radians.
+float64 current_yaw

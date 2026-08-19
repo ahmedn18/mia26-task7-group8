@@ -12,6 +12,8 @@ find_package(std_msgs REQUIRED)
 
 rosidl_generate_interfaces(${PROJECT_NAME}
   "action/Move.action"
+  "action/MoveX.action"
+  "action/MoveYaw.action"
   DEPENDENCIES action_msgs std_msgs
 )
 

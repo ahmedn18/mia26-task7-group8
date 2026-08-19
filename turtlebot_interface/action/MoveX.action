@@ -1,0 +1,11 @@
+# Goal: signed distance to drive along the robot's heading, in metres.
+# Positive drives forward, negative reverses.
+float64 target_distance
+---
+# Result
+bool success
+string message
+float64 distance_travelled
+---
+# Feedback: distance covered so far, in metres.
+float64 current_distance
