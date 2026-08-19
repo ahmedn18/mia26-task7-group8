@@ -30,7 +30,31 @@ import rclpy
 from rclpy.callback_groups import ReentrantCallbackGroup
 from rclpy.executors import MultiThreadedExecutor
 from rclpy.node import Node
+from rclpy.task import Future
 from std_srvs.srv import SetBool
+
+
+def _make_rclpy_futures_awaitable():
+    """Let asyncio await rclpy Futures.
+
+    rclpy's Future.__await__ does `yield self`, but an asyncio Task only
+    accepts a bare `yield` or an asyncio Future and raises "Task got bad
+    yield" on anything else. The stages await rclpy futures directly, so
+    without this every stage dies on its first service or action call.
+
+    Polling on asyncio.sleep rather than yielding bare keeps this from
+    becoming a busy loop -- the executor thread is what actually completes
+    the future, and 10 ms is well inside the 20 Hz control loop.
+    """
+    def __await__(self):
+        while not self.done():
+            yield from asyncio.sleep(0.01).__await__()
+        return self.result()
+
+    Future.__await__ = __await__
+
+
+_make_rclpy_futures_awaitable()
 
 # One service moves both gates, in opposite directions. See the repo README.
 DEFAULT_GATE_SERVICE = 'toggle_walls_1_2'
