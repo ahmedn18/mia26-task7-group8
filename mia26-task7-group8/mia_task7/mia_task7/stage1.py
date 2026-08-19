@@ -53,3 +53,15 @@ if not await self._send_x(0.30):
     return False
 
 await asyncio.sleep(GATE_OPEN_S)
+
+if not await self._send_x(0.45):
+            self.node.get_logger().error(
+                "Stage 1: crossing movement failed"
+            )
+            return False
+
+        self.node.get_logger().info(
+            "Stage 1 complete, y ~= 1.25"
+        )
+
+        return True
