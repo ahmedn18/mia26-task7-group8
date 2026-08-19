@@ -37,3 +37,7 @@ if not await self._call_gate(open_gate1=True):
 if not await self._send_yaw(math.radians(90)):
             self.node.get_logger().error("Stage 1: yaw +90 failed")
             return False
+
+if not await self._send_x(0.30):
+            self.node.get_logger().error("Stage 1: approach leg failed")
+            return False
