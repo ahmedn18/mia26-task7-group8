@@ -29,3 +29,6 @@ class Stage1:
     async def run(self) -> bool:
         """Runs the whole stage. Returns True on success, False on failure."""
  
+        if not await self._call_gate(open_gate1=True):
+            self.node.get_logger().error("Stage 1: gate service call failed")
+            return False
