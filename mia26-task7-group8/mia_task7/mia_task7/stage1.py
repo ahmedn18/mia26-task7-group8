@@ -5,7 +5,7 @@ from rclpy.node import Node
 from rclpy.action import ActionClient
 from std_srvs.srv import SetBool
 
-from maze_nav_interfaces.action import MoveX, MoveYaw
+from turtlebot_interface.action import MoveX, MoveYaw
 
 
 GATE_OPEN_S = 2.0

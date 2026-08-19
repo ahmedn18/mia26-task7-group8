@@ -3,7 +3,7 @@ from rclpy.action import ActionServer
 from rclpy.node import Node
 from geometry_msgs.msg import Twist
 from nav_msgs.msg import Odometry
-from custom_maze_interfaces.action import MoveX
+from turtlebot_interface.action import MoveX
 import math
 import time
 
@@ -14,7 +14,7 @@ class MoveXActionServer(Node):
         self._action_server = ActionServer(
             self,
             MoveX,
-            'move_robot_x',
+            'move_x',
             self.execute_callback)
         
         self.cmd_vel_pub = self.create_publisher(Twist, '/cmd_vel', 10)
