@@ -127,3 +127,30 @@ class Stage1:
         result = await goal_handle.get_result_async()
 
         return bool(result.result.success)
+
+        async def _send_x(self, distance_m: float) -> bool:
+
+        if not self.move_x_client.wait_for_server(
+            timeout_sec=2.0
+        ):
+            self.node.get_logger().error(
+                "move_x server is not available"
+            )
+            return False
+
+        goal_msg = MoveX.Goal()
+        goal_msg.target_distance = distance_m
+
+        goal_handle = await self.move_x_client.send_goal_async(
+            goal_msg
+        )
+
+        if not goal_handle.accepted:
+            self.node.get_logger().error(
+                "move_x goal was rejected"
+            )
+            return False
+
+        result = await goal_handle.get_result_async()
+
+        return bool(result.result.success)
