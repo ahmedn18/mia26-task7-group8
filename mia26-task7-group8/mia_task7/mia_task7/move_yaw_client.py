@@ -1,7 +1,8 @@
 import rclpy
 from rclpy import Node
 from robot_action.action import Move
-
+from rclpy.action import ActionClient
+from std_srvs/srv/SetBool import SetBool
 class Action_client(Node):
     def __init__(self):
 
@@ -12,12 +13,15 @@ class Action_client(Node):
             Move, 
             '/move_yaw')
         
-    def send_goal(self):
+    def send_goal(self, first_yaw: float, second_yaw: float):
         self.get_logger().info('Waiting for action server...')
-        self.action_client.wait_for_server(timeout_sec=10.0)
-        goal_msg = Move.Goal()
+        if not self.action_client.wait_for_server(timeout_sec=10.0):
+            self.get_logger().error('Action server not available, shutting down')
+            rclpy.shutdown()
+            return
 
         #our goal is  
+        goal_msg = Move.Goal()
         goal_msg.first_yaw = first_yaw
         goal_msg.second_yaw = second_yaw
 
@@ -34,7 +38,9 @@ class Action_client(Node):
 
     def feedback_callback(self, feedback_msg):
         feedback = feedback_msg.feedback
-            self.get_logger().info(f'Feedback received: {feedback.current_action}, Progress: {feedback.progress}%')
+            self.get_logger().info(
+            f'Feedback: {feedback.current_action}, progress: {feedback.progress:.0%}'
+        )
     def get_result_callback(self, future):
         result = future.result().result
         self.get_logger().info(f'Result received: Success: {result.success}, Message: {result.message}')
