@@ -10,7 +10,6 @@ setup(
         ('share/ament_index/resource_index/packages',
             ['resource/' + package_name]),
         ('share/' + package_name, ['package.xml']),
-        ('share/' + package_name + '/launch', ['launch/robot_launch.launch.py']),
     ],
     install_requires=['setuptools'],
     zip_safe=True,
@@ -25,8 +24,8 @@ setup(
     },
     entry_points={
         'console_scripts': [
-            'yaw_server = mia_task7.yaw_server:main',
-            'move_yaw_client = mia_task7.move_yaw_client:main',
+            'move_x_server = mia_task7.move_x_server:main'
+            'move_x_client = mia_task7.move_x_client:main'
         ],
     },
 )
