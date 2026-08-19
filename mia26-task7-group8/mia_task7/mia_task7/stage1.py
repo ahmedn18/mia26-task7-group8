@@ -31,30 +31,29 @@ class Stage1:
             'move_x'
         )
 
-        async def run(self) -> bool:
+    async def run(self) -> bool:
 
+        if not await self._call_gate(True):
+            self.node.get_logger().error(
+                "Stage 1: gate service call failed"
+            )
+            return False
 
-if not await self._call_gate(True):
-    self.node.get_logger().error(
-        "Stage 1: gate service call failed"
-    )
-    return False
+        if not await self._send_yaw(math.radians(90)):
+            self.node.get_logger().error(
+                "Stage 1: yaw +90 failed"
+            )
+            return False
 
-if not await self._send_yaw(math.radians(90)):
-    self.node.get_logger().error(
-        "Stage 1: yaw +90 failed"
-    )
-    return False
+        if not await self._send_x(0.30):
+            self.node.get_logger().error(
+                "Stage 1: approach movement failed"
+            )
+            return False
 
-if not await self._send_x(0.30):
-    self.node.get_logger().error(
-        "Stage 1: approach movement failed"
-    )
-    return False
+        await asyncio.sleep(GATE_OPEN_S)
 
-await asyncio.sleep(GATE_OPEN_S)
-
-if not await self._send_x(0.45):
+        if not await self._send_x(0.45):
             self.node.get_logger().error(
                 "Stage 1: crossing movement failed"
             )
@@ -65,3 +64,19 @@ if not await self._send_x(0.45):
         )
 
         return True
+
+        async def _call_gate(self, open_gate1: bool) -> bool:
+
+        if not self.gate_client.wait_for_service(timeout_sec=2.0):
+            self.node.get_logger().error(
+                "Gate service is not available"
+            )
+            return False
+
+        request = SetBool.Request()
+        request.data = open_gate1
+
+        future = self.gate_client.call_async(request)
+        result = await future
+
+        return bool(result.success)
