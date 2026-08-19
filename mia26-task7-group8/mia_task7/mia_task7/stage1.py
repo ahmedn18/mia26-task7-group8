@@ -31,5 +31,12 @@ class Stage1:
             'move_x'
         )
 
-    async def run(self) -> bool:
-        
+        async def run(self) -> bool:
+
+
+if not await self._call_gate(True):
+    self.node.get_logger().error(
+        "Stage 1: gate service call failed"
+    )
+    return False
+
