@@ -1,8 +1,9 @@
 import rclpy
-from rclpy import Node
-from turtleBot_interface.action import Move
+from rclpy.node import Node
+from turtlebot_interface.action import Move
 from rclpy.action import ActionClient
-from std_srvs/srv/SetBool import SetBool
+from std_srvs.srv import SetBool
+
 class Action_client(Node):
     def __init__(self):
 
@@ -38,8 +39,8 @@ class Action_client(Node):
 
     def feedback_callback(self, feedback_msg):
         feedback = feedback_msg.feedback
-            self.get_logger().info(
-            f'Feedback: {feedback.current_action}, progress: {feedback.progress:.0%}'
+        self.get_logger().info(
+        f'Feedback: {feedback.current_action}, progress: {feedback.progress:.0%}'
         )
     def get_result_callback(self, future):
         result = future.result().result
@@ -47,6 +48,6 @@ class Action_client(Node):
         rclpy.shutdown()
 def main():
     rclpy.init()
-    node = MoveYawClient()
+    node = Action_client()
     node.send_goal(first_yaw=90.0, second_yaw=0.0)
     rclpy.spin(node)
