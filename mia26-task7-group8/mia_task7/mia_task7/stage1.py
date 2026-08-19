@@ -65,7 +65,7 @@ class Stage1:
 
         return True
 
-        async def _call_gate(self, open_gate1: bool) -> bool:
+    async def _call_gate(self, open_gate1: bool) -> bool:
 
         if not self.gate_client.wait_for_service(timeout_sec=2.0):
             self.node.get_logger().error(
@@ -81,27 +81,7 @@ class Stage1:
 
         return bool(result.success)
 
-
-
-
-            async def _call_gate(self, open_gate1: bool) -> bool:
-
-        if not self.gate_client.wait_for_service(timeout_sec=2.0):
-            self.node.get_logger().error(
-                "Gate service is not available"
-            )
-            return False
-
-        request = SetBool.Request()
-        request.data = open_gate1
-
-        future = self.gate_client.call_async(request)
-        result = await future
-
-        return bool(result.success)
-
-
-        async def _send_yaw(self, angle_rad: float) -> bool:
+    async def _send_yaw(self, angle_rad: float) -> bool:
 
         if not self.move_yaw_client.wait_for_server(
             timeout_sec=2.0
@@ -128,7 +108,7 @@ class Stage1:
 
         return bool(result.result.success)
 
-        async def _send_x(self, distance_m: float) -> bool:
+    async def _send_x(self, distance_m: float) -> bool:
 
         if not self.move_x_client.wait_for_server(
             timeout_sec=2.0
