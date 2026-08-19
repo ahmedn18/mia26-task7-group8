@@ -5,6 +5,8 @@ Distances come from maze_world.sdf in the simulation repo. Arena is
 y = 1.0 (closed at startup) and gate 2 at y = 2.0 (open at startup).
 """
 
+import math
+
 # --- Gates -----------------------------------------------------------------
 
 # One SetBool service moves both gates, in opposite directions:
@@ -27,7 +29,16 @@ STAGE1_CROSS_M = 0.45
 STAGE2_APPROACH_M = 0.55
 STAGE2_CROSS_M = 0.70
 
-STAGE3_RUN_M = 4.50
+# Stage 3 is split so the final goal is short. The simulation shuts itself
+# down the moment the robot touches the pad, which cuts the in-flight goal
+# off mid-action; keeping that goal small means only the last 0.30 m is
+# exposed to it and everything before is verified normally.
+STAGE3_APPROACH_M = 4.20   # up to the pad's west edge at x = 4.7
+STAGE3_TOUCH_M = 0.30      # onto the pad centre at x = 5.0
+
+# Turns, radians, positive is left.
+STAGE1_TURN_RAD = math.pi / 2.0    # onto the +y corridor
+STAGE3_TURN_RAD = -math.pi / 2.0   # onto the finish run
 
 # --- Action server control loop --------------------------------------------
 
