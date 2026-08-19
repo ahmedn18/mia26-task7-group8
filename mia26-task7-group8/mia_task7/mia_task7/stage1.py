@@ -99,3 +99,31 @@ class Stage1:
         result = await future
 
         return bool(result.success)
+
+
+        async def _send_yaw(self, angle_rad: float) -> bool:
+
+        if not self.move_yaw_client.wait_for_server(
+            timeout_sec=2.0
+        ):
+            self.node.get_logger().error(
+                "move_yaw server is not available"
+            )
+            return False
+
+        goal_msg = MoveYaw.Goal()
+        goal_msg.target_yaw = angle_rad
+
+        goal_handle = await self.move_yaw_client.send_goal_async(
+            goal_msg
+        )
+
+        if not goal_handle.accepted:
+            self.node.get_logger().error(
+                "move_yaw goal was rejected"
+            )
+            return False
+
+        result = await goal_handle.get_result_async()
+
+        return bool(result.result.success)
