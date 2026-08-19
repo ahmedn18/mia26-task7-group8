@@ -24,6 +24,8 @@ setup(
     },
     entry_points={
         'console_scripts': [
+            'move_x_server = mia_task7.move_x_server:main'
+            'move_x_client = mia_task7.move_x_client:main'
         ],
     },
 )
