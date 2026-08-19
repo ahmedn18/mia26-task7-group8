@@ -41,3 +41,5 @@ if not await self._send_yaw(math.radians(90)):
 if not await self._send_x(0.30):
             self.node.get_logger().error("Stage 1: approach leg failed")
             return False
+
+wait asyncio.sleep(GATE_OPEN_S)
